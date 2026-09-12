@@ -1,4 +1,4 @@
-const state = { data: null };
+const state = { data: null, city: '全部' };
 
 const setStatus = (text, type) => {
   $('#status').text(text).attr('class', 'alert alert-' + type).show();
@@ -39,9 +39,7 @@ const loadData = async () => {
     $('#sub-title').text(data.title);
     $('#data-source').text('数据来源：' + data.source + ' · 气温单位：℃ · 降水量单位：mm');
     $('#status').hide();
-    renderCards(data);
-    renderTempChart(data);
-    renderRainChart(data);
+    renderAll();
   } catch (error) {
     setStatus('加载失败：' + error.message, 'danger');
   }
@@ -65,7 +63,7 @@ const renderTempChart = (data) => {
       type: 'line',
       data: s.temps
     }))
-  });
+  }, true);
 };
 
 let rainChart = null;
@@ -100,6 +98,23 @@ const renderRainChart = (data) => {
 
 window.addEventListener('resize', () => {
   if (tempChart) tempChart.resize();
+});
+
+const renderAll = () => {
+  const data = state.data;
+  const shown = state.city === '全部'
+    ? data
+    : { ...data, series: data.series.filter(s => s.city === state.city) };
+  renderCards(shown);
+  renderTempChart(shown);
+  renderRainChart(shown);
+};
+
+$('#city-filters').on('click', 'button', function () {
+  state.city = $(this).data('city');
+  $('#city-filters button').removeClass('btn-primary').addClass('btn-outline-primary');
+  $(this).removeClass('btn-outline-primary').addClass('btn-primary');
+  renderAll();
 });
 
 loadData();
