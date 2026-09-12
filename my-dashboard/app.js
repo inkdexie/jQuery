@@ -40,9 +40,35 @@ const loadData = async () => {
     $('#data-source').text('数据来源：' + data.source + ' · 气温单位：℃ · 降水量单位：mm');
     $('#status').hide();
     renderCards(data);
+    renderTempChart(data);
   } catch (error) {
     setStatus('加载失败：' + error.message, 'danger');
   }
 };
+
+let tempChart = null;
+
+const renderTempChart = (data) => {
+  if (tempChart === null) {
+    tempChart = echarts.init(document.querySelector('#temp-chart'));
+  }
+  tempChart.setOption({
+    title: { text: '各城市月均气温（℃）', left: 'center' },
+    tooltip: { trigger: 'axis' },
+    legend: { bottom: 0 },
+    grid: { left: 50, right: 20, top: 50, bottom: 50 },
+    xAxis: { type: 'category', data: data.months },
+    yAxis: { type: 'value', name: '℃' },
+    series: data.series.map(s => ({
+      name: s.city,
+      type: 'line',
+      data: s.temps
+    }))
+  });
+};
+
+window.addEventListener('resize', () => {
+  if (tempChart) tempChart.resize();
+});
 
 loadData();
