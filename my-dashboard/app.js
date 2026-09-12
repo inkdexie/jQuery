@@ -41,6 +41,7 @@ const loadData = async () => {
     $('#status').hide();
     renderCards(data);
     renderTempChart(data);
+    renderRainChart(data);
   } catch (error) {
     setStatus('加载失败：' + error.message, 'danger');
   }
@@ -64,6 +65,36 @@ const renderTempChart = (data) => {
       type: 'line',
       data: s.temps
     }))
+  });
+};
+
+let rainChart = null;
+
+const renderRainChart = (data) => {
+  if (rainChart !== null) {
+    rainChart.destroy();
+  }
+  const ctx = document.querySelector('#rain-chart');
+  rainChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: data.months,
+      datasets: data.series.map(s => ({
+        label: s.city,
+        data: s.rain,
+        borderWidth: 1
+      }))
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: '各城市月降水量（mm）' }
+      },
+      scales: {
+        y: { title: { display: true, text: 'mm' } }
+      }
+    }
   });
 };
 
