@@ -101,6 +101,7 @@ window.addEventListener('resize', () => {
 });
 
 const renderAll = () => {
+  if (!state.data) return;
   const data = state.data;
   const shown = state.city === '全部'
     ? data
