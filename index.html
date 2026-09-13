@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>城市天气看板</title>
+  <link href="libs/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .chart-box { height: 360px; }
+    #status { display: none; }
+  </style>
+</head>
+<body class="container py-4">
+  <header>
+    <h1 class="h3">城市天气看板</h1>
+    <p class="text-muted" id="sub-title">数据来源：待加载</p>
+  </header>
+  <p id="status" class="alert alert-warning"></p>
+  <div class="filters mb-3" id="city-filters">
+    <button type="button" class="btn btn-sm btn-primary me-2" data-city="全部">全部</button>
+    <button type="button" class="btn btn-sm btn-outline-primary me-2" data-city="北京">北京</button>
+    <button type="button" class="btn btn-sm btn-outline-primary me-2" data-city="上海">上海</button>
+    <button type="button" class="btn btn-sm btn-outline-primary" data-city="昆明">昆明</button>
+  </div>
+  <section class="row g-3 mb-4" id="cards"></section>
+  <section class="row g-3">
+    <div class="col-lg-6">
+      <h2 class="h5">全年气温趋势（ECharts折线图，单位：℃）</h2>
+      <div id="temp-chart" class="chart-box"></div>
+    </div>
+    <div class="col-lg-6">
+      <h2 class="h5">全年降水量对比（Chart.js柱状图，单位：mm）</h2>
+      <div class="chart-box"><canvas id="rain-chart"></canvas></div>
+    </div>
+  </section>
+  <footer class="text-muted small mt-4" id="data-source"></footer>
+  <script src="libs/jquery-3.7.1.min.js"></script>
+  <script src="libs/bootstrap.bundle.min.js"></script>
+  <script src="libs/echarts.min.js"></script>
+  <script src="libs/chart.umd.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
